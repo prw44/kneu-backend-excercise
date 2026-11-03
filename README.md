@@ -152,6 +152,6 @@ If you’d like, include a short note describing:
 - Followed the existing medications feature structure by adding a prescription entity, repository, and controller.
 - A prescription can have multiple daily times. The brief mentions one time, but supporting several seemed like a reasonable extension.
 - Added controller tests for successful prescription creation, invalid requests, and retrieving saved prescriptions.
-- Updated the medication controller test to clear test data before each run, so it doesn't depend on data from previous tests
+- Updated the medication controller test to clear test data before each run, so it doesn't depend on data from previous tests.
 - Configured prescription retrieval to load the related medication and scheduled times, so the API can include them in its JSON response.
 - User ownership and authentication are not included. With more time, I would associate prescriptions with authenticated users and restrict each user to their own prescriptions.
