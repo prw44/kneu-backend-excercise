@@ -1,6 +1,7 @@
 package com.kneu.medications;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,18 +23,27 @@ class MedicationControllerTest {
     @Autowired
     private MedicationRepository medicationRepository;
 
+    @Autowired
+    private PrescriptionRepository prescriptionRepository;
+
+    @BeforeEach
+    void clearDatabase() {
+        prescriptionRepository.deleteAll();
+        medicationRepository.deleteAll();
+    }
+
     @Test
     void getAllMedications() throws Exception {
-        medicationRepository.save(new Medication("Aspirin", "100mg"));
-        medicationRepository.save(new Medication("Metformin", "500mg"));
+        Medication aspirin = medicationRepository.save(new Medication("Aspirin", "100mg"));
+        Medication metformin = medicationRepository.save(new Medication("Metformin", "500mg"));
 
         mockMvc.perform(get("/medications"))
             .andExpect(status().isOk())
             .andExpect(content().json("""
                 [
-                    {"id": 1, "name": "Aspirin", "dosage": "100mg"},
-                    {"id": 2, "name": "Metformin", "dosage": "500mg"}
+                    {"id": %d, "name": "Aspirin", "dosage": "100mg"},
+                    {"id": %d, "name": "Metformin", "dosage": "500mg"}
                 ]
-                """));
+                """.formatted(aspirin.getId(), metformin.getId())));
     }
 }
